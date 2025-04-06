@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Missão</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #0A0A0A;
+            color: #FFFFFF;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .download-button {
+            background: #FF6B6B;
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .download-button:hover {
+            background: #FF5252;
+            transform: translateY(-1px);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 7rem 1rem 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mission-card {
+            background: #1A1A1A;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 2rem;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .mission-header {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 142, 83, 0.1) 100%);
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mission-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .mission-id {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .mission-info {
+            padding: 2rem;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .difficulty-easy {
+            background: #10B981;
+            color: white;
+        }
+
+        .difficulty-medium {
+            background: #F59E0B;
+            color: white;
+        }
+
+        .difficulty-hard {
+            background: #EF4444;
+            color: white;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #FF6B6B;
+        }
+
+        .ninja-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ninja-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ninja-item:last-child {
+            border-bottom: none;
+        }
+
+        .ninja-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            border: 2px solid #FF6B6B;
+        }
+
+        .ninja-info {
+            flex: 1;
+        }
+
+        .ninja-name {
+            font-weight: 600;
+        }
+
+        .ninja-rank {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .no-ninjas {
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1A1A1A;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: #2A2A2A;
+            transform: translateY(-1px);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1A1A1A;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background: #2A2A2A;
+            transform: translateY(-1px);
+        }
+
+        .edit-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #F59E0B;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .edit-button:hover {
+            background: #D97706;
+            transform: translateY(-1px);
+        }
+
+        .delete-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #EF4444;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background: #DC2626;
+            transform: translateY(-1px);
+        }
+
+        /* Kunai animation */
+        .kunai {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #1A1A1A;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .modal-message {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .confirm-button {
+            background: #EF4444;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .confirm-button:hover {
+            background: #DC2626;
+        }
+
+        .cancel-button {
+            background: #374151;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cancel-button:hover {
+            background: #4B5563;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .mission-card {
+                max-width: 100%;
+            }
+
+            .mission-name {
+                font-size: 1.75rem;
+            }
+
+            .button-container {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .back-button, .home-button, .edit-button, .delete-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <a href="/ninja/ui/boasVindas" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="kunai">
+            <!-- Kunai Blade -->
+            <polygon points="12,3 14,8 10,8" fill="#FF6B6B" stroke-width="0"/>
+            <!-- Handle -->
+            <rect x="10" y="8" width="4" height="10" fill="#FF6B6B" stroke-width="0"/>
+            <!-- Wrap/Grip -->
+            <line x1="9" y1="10" x2="15" y2="10" stroke-width="1.5"/>
+            <line x1="9" y1="12" x2="15" y2="12" stroke-width="1.5"/>
+            <line x1="9" y1="14" x2="15" y2="14" stroke-width="1.5"/>
+            <!-- Ring at the end -->
+            <circle cx="12" cy="20" r="1.5" fill="#FF6B6B" stroke-width="0"/>
+        </svg>
+        NinjaSystem
+    </a>
+    <div class="nav-links">
+        <a href="/ninja/ui/listar" class="nav-link">Ninjas</a>
+        <a href="/missoes/ui/listar" class="nav-link">Missões</a>
+        <a href="/ninja/ui/cadastrar" class="nav-link">Cadastrar Ninja</a>
+        <a href="/missoes/ui/criar" class="nav-link">Criar Missão</a>
+    </div>
+    <a href="/missoes/ui/criar" class="download-button">Criar Missão</a>
+</nav>
+
+<div class="container">
+    <h1 class="page-title">Detalhes da Missão</h1>
+
+    <div class="mission-card">
+        <div class="mission-header">
+            <h2 class="mission-name" th:text="${missoes.nome}"></h2>
+            <div class="mission-id">ID: <span th:text="${missoes.id}"></span></div>
+        </div>
+        <div class="mission-info">
+            <div
+                    th:class="${missoes.dificuldade == 'Fácil' ? 'difficulty-badge difficulty-easy' :
+                              (missoes.dificuldade == 'Média' ? 'difficulty-badge difficulty-medium' :
+                              'difficulty-badge difficulty-hard')}"
+                    th:text="${missoes.dificuldade}">
+            </div>
+
+            <h3 class="section-title">Ninjas Designados</h3>
+            <div class="ninja-list">
+                <div th:if="${missoes.ninjas != null && !missoes.ninjas.isEmpty()}">
+                    <div th:each="ninja : ${missoes.ninjas}" class="ninja-item">
+                        <img th:src="${ninja.imgUrl}" alt="Ninja" class="ninja-image">
+                        <div class="ninja-info">
+                            <div class="ninja-name" th:text="${ninja.nome}"></div>
+                            <div class="ninja-rank" th:text="${ninja.rank}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${missoes.ninjas == null || missoes.ninjas.isEmpty()}" class="no-ninjas">
+                    Nenhum ninja designado para esta missão.
+                </div>
+            </div>
+
+            <div class="button-container">
+                <a href="/missoes/ui/listar" class="back-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Voltar para Lista
+                </a>
+                <a href="#" class="edit-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Editar Missão
+                </a>
+                <button
+                        class="delete-button"
+                        th:attr="data-id=${missoes.id},data-name=${missoes.nome}"
+                        onclick="openDeleteModal(this.getAttribute('data-id'), this.getAttribute('data-name'))"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Deletar Missão
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="/ninja/ui/boasVindas" class="home-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Página Inicial
+        </a>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">Confirmar Exclusão</div>
+        <div class="modal-message">
+            Você realmente deseja excluir a missão <span id="missaoName" class="font-bold"></span>?
+            <p class="text-red-400 mt-2 text-sm">Esta ação não pode ser desfeita.</p>
+        </div>
+        <div class="modal-buttons">
+            <button id="confirmDelete" class="confirm-button">Confirmar</button>
+            <button onclick="closeModal()" class="cancel-button">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Modal functionality
+    let deleteUrl = '';
+
+    function openDeleteModal(id, name) {
+        document.getElementById('missaoName').textContent = name;
+        deleteUrl = '/missoes/ui/deletar/' + id;
+
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'flex';
+
+        // Set up the confirm button
+        document.getElementById('confirmDelete').onclick = function() {
+            window.location.href = deleteUrl;
+        };
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    // Close modal if user clicks outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+</body>
+</html>

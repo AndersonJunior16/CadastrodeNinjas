@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Ninja</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #0A0A0A;
+            color: #FFFFFF;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .download-button {
+            background: #FF6B6B;
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .download-button:hover {
+            background: #FF5252;
+            transform: translateY(-1px);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 7rem 1rem 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ninja-card {
+            background: #1A1A1A;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 2rem;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .ninja-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .ninja-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ninja-info {
+            padding: 2rem;
+        }
+
+        .ninja-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #FF6B6B;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .rank-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1A1A1A;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: #2A2A2A;
+            transform: translateY(-1px);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1A1A1A;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background: #2A2A2A;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .ninja-card {
+                max-width: 100%;
+            }
+
+            .ninja-image {
+                height: 250px;
+            }
+
+            .ninja-name {
+                font-size: 1.75rem;
+            }
+
+            .button-container {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .back-button, .home-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <a href="/ninja/ui/boasVindas" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shuriken">
+            <circle cx="12" cy="12" r="2" fill="#FF6B6B"/>
+            <path d="M12 2L12 6M12 18L12 22M2 12L6 12M18 12L22 12M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93"/>
+        </svg>
+        NinjaSystem
+    </a>
+    <div class="nav-links">
+        <a href="/ninja/ui/listar" class="nav-link">Ninjas</a>
+        <a href="/ninja/ui/criar" class="nav-link">Cadastrar</a>
+        <a href="#" class="nav-link">Missões</a>
+        <a href="#" class="nav-link">Sobre</a>
+    </div>
+    <a href="/ninja/ui/criar" class="download-button">Cadastrar</a>
+</nav>
+
+<div class="container">
+    <h1 class="page-title">Detalhes do Ninja</h1>
+
+    <div th:each="ninja : ${ninjas}" class="ninja-card">
+        <img th:src="${ninja.imgUrl}" alt="Ninja" class="ninja-image">
+        <div class="ninja-info">
+            <h2 class="ninja-name" th:text="${ninja.nome}"></h2>
+
+            <div class="info-section">
+                <div class="info-item">
+                    <span class="info-label">ID:</span>
+                    <span class="info-value" th:text="${ninja.id}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value" th:text="${ninja.email}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Idade:</span>
+                    <span class="info-value" th:text="${ninja.idade}"></span>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3 class="text-lg font-semibold mb-2">Missão Atual</h3>
+                <div th:if="${ninja.missoes != null}">
+                    <div class="info-item">
+                        <span class="info-label">Nome:</span>
+                        <span class="info-value" th:text="${ninja.missoes.nome}"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Nível:</span>
+                        <span class="info-value" th:text="${ninja.missoes.dificuldade}"></span>
+                    </div>
+                </div>
+                <div th:if="${ninja.missoes == null}" class="text-gray-400">
+                    Este ninja não está em nenhuma missão no momento.
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div class="rank-badge" th:text="${ninja.rank}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <a href="/ninja/ui/listar" class="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Voltar para Lista
+        </a>
+        <a href="/ninja/ui/boasVindas" class="home-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Página Inicial
+        </a>
+    </div>
+</div>
+</body>
+</html>
